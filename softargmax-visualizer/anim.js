@@ -122,8 +122,9 @@ updateButton.click(updateValues);
 fileUpload.change(handleFileUpload);
 algorithmSelect.change(() => {
     softmaxValues = calculateAlgorithm(values);
-    initializeAnimation();
-    draw();
+    draw(); // Only draw the updated data without starting the animation
+    stopButton.hide();
+    startButton.show();
 });
 
 let currentValues = [...values];
@@ -177,7 +178,9 @@ function animate() {
     // Draw labels
     context.fillStyle = "black";
     context.font = "16px Arial";
-    context.fillText("Original Values to Softmax Values", Width / 2 - 100, 30);
+    const algorithm = algorithmSelect.val();
+    const label = algorithm === 'softargmax' ? 'Softargmax Values' : 'Softmax Values';
+    context.fillText(label, Width / 2 - 100, 30);
 
     if (playAnimation) {
         requestAnimationFrame(animate);
