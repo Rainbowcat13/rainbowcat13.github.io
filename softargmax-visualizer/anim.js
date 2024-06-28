@@ -45,7 +45,7 @@ stopButton.click(function () {
 resetButton.click(function () {
     playAnimation = false;
     initializeAnimation();
-    draw();
+    draw(true); // Pass true to reset to the original state
 });
 
 // Softmax function
@@ -173,12 +173,13 @@ function animate() {
     }
 
     // Draw transitioning values histogram
-    drawHistogram(currentValues, 20, 40, histogramWidth, histogramHeight, "green");
+    const algorithm = algorithmSelect.val();
+    const color = algorithm === 'softargmax' ? 'purple' : 'green';
+    drawHistogram(currentValues, 20, 40, histogramWidth, histogramHeight, color);
 
     // Draw labels
     context.fillStyle = "black";
     context.font = "16px Arial";
-    const algorithm = algorithmSelect.val();
     const label = algorithm === 'softargmax' ? 'Softargmax Values' : 'Softmax Values';
     context.fillText(label, Width / 2 - 100, 30);
 
@@ -187,7 +188,7 @@ function animate() {
     }
 }
 
-function draw() {
+function draw(reset = false) {
     let Width = canvas.width();
     let Height = canvas.height();
     context.clearRect(0, 0, Width, Height);
@@ -196,12 +197,18 @@ function draw() {
     const histogramHeight = Height - 60; // Reduced to fit labels
 
     // Draw original values histogram
-    drawHistogram(values, 20, 40, histogramWidth, histogramHeight, "green");
+    drawHistogram(values, 20, 40, histogramWidth, histogramHeight, "blue");
 
     // Draw labels
     context.fillStyle = "black";
     context.font = "16px Arial";
-    context.fillText("Original Values", Width / 2 - 50, 30);
+    if (reset) {
+        context.fillText("Original Values", Width / 2 - 50, 30);
+    } else {
+        const algorithm = algorithmSelect.val();
+        const label = algorithm === 'softargmax' ? 'Softargmax Values' : 'Softmax Values';
+        context.fillText(label, Width / 2 - 100, 30);
+    }
 }
 
 initializeAnimation();

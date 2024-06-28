@@ -1,16 +1,22 @@
+/* Global styles */
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     display: flex;
     flex-direction: column;
+    background: #f0f0f0;
+    color: #333;
 }
+
+/* Container styles */
 #mainContainer {
     display: flex;
     flex: 1;
     width: 100%;
 }
+
 #canvasContainer {
     flex: 3;
     display: flex;
@@ -19,21 +25,63 @@ html, body {
     padding: 20px;
     box-sizing: border-box;
 }
+
 #controlsContainer {
     flex: 2;
     display: flex;
     flex-direction: column;
     padding: 20px;
     box-sizing: border-box;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+/* Form element styles */
 #controlsContainer div {
     margin-bottom: 20px;
 }
-#controlsContainer button, #controlsContainer input, #controlsContainer select {
+
+#controlsContainer label {
+    font-weight: bold;
+}
+
+#controlsContainer input[type="text"],
+#controlsContainer input[type="file"],
+#controlsContainer select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Button styles */
+.btn {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    background: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
 }
+
+.btn:hover {
+    background: #0056b3;
+}
+
+.btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Canvas styles */
 canvas {
-    border: 1px solid black;
+    border: 1px solid #ddd;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
