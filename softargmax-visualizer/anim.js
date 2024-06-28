@@ -4,10 +4,8 @@ let context = canvas.get(0).getContext("2d");
 // Function to resize the canvas
 function resizeCanvas() {
     const canvasContainer = $("#canvasContainer");
-    console.log("Canvas Container Dimensions:", canvasContainer.width(), canvasContainer.height());
     canvas.attr("width", canvasContainer.width());
     canvas.attr("height", canvasContainer.height());
-    console.log("Canvas Dimensions after resizing:", canvas.width(), canvas.height());
 }
 
 // Set canvas size initially
