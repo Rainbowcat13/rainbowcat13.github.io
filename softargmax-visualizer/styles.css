@@ -1,0 +1,37 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+#mainContainer {
+    display: flex;
+    flex: 1;
+    width: 100%;
+}
+#canvasContainer {
+    flex: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#controlsContainer {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+#controlsContainer div {
+    margin-bottom: 20px;
+}
+#controlsContainer button, #controlsContainer input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+canvas {
+    border: 1px solid black;
+}
