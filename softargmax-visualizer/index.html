@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="RU">
+
+<head>
+    <title>Softmax Visualization</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        #canvasContainer {
+            width: 60%;
+            height: 100%;
+            float: left;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+        #controlsContainer {
+            width: 40%;
+            height: 100%;
+            float: right;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+        #controlsContainer div {
+            margin-bottom: 20px;
+        }
+        #controlsContainer button, #controlsContainer input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+<div id="canvasContainer">
+    <canvas id="Canvas"></canvas>
+</div>
+
+<div id="controlsContainer">
+    <div id="inputArray">
+        <label for="arrayInput">Enter array (comma-separated):</label>
+        <input type="text" id="arrayInput" value="1.0, 2.0, 3.0, 2.5, 1.5">
+        <button id="update">Update</button>
+    </div>
+    <div id="fileInput">
+        <label for="fileUpload">Upload array from file:</label>
+        <input type="file" id="fileUpload" accept=".txt">
+    </div>
+    <div id="controls">
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+        <button id="reset">Reset</button>
+    </div>
+</div>
+<script type="text/javascript" src="anim.js"></script>
+</body>
+
+</html>
