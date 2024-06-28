@@ -29,13 +29,11 @@ html, body {
 #controlsContainer div {
     margin-bottom: 20px;
 }
-#controlsContainer button, #controlsContainer input {
+#controlsContainer button, #controlsContainer input, #controlsContainer select {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
 }
 canvas {
-    width: 100%;
-    height: 100%;
     border: 1px solid black;
 }

@@ -23,6 +23,7 @@ let resetButton = $("#reset");
 let updateButton = $("#update");
 let arrayInput = $("#arrayInput");
 let fileUpload = $("#fileUpload");
+let algorithmSelect = $("#algorithm");
 
 // Code to disable Start button initially
 stopButton.hide();
@@ -55,18 +56,36 @@ function softmax(arr) {
     return expArr.map(exp => exp / sumExpArr);
 }
 
+// Softargmax function
+function softargmax(arr) {
+    const maxVal = Math.max(...arr);
+    const expArr = arr.map(x => Math.exp(x - maxVal));
+    const sumExpArr = expArr.reduce((a, b) => a + b, 0);
+    return expArr.map(exp => exp / sumExpArr).map((val, idx) => val * arr[idx]);
+}
+
 // Update values based on user input
 function updateValues() {
     let inputValues = arrayInput.val().split(',').map(Number);
     if (inputValues.length > 0 && inputValues.every(val => !isNaN(val))) {
         values = inputValues;
-        softmaxValues = softmax(values);
+        softmaxValues = calculateAlgorithm(values);
         initializeAnimation();
         draw(); // Only draw the updated data without starting the animation
         stopButton.hide();
         startButton.show();
     } else {
         alert("Please enter a valid array of numbers.");
+    }
+}
+
+// Calculate based on selected algorithm
+function calculateAlgorithm(arr) {
+    let algorithm = algorithmSelect.val();
+    if (algorithm === 'softargmax') {
+        return softargmax(arr);
+    } else {
+        return softmax(arr);
     }
 }
 
@@ -80,7 +99,7 @@ function handleFileUpload(event) {
             const inputValues = content.split(',').map(Number);
             if (inputValues.length > 0 && inputValues.every(val => !isNaN(val))) {
                 values = inputValues;
-                softmaxValues = softmax(values);
+                softmaxValues = calculateAlgorithm(values);
                 arrayInput.val(content); // Update the text input with file content
                 initializeAnimation();
                 draw(); // Only draw the updated data without starting the animation
@@ -96,11 +115,16 @@ function handleFileUpload(event) {
 
 // Initial array values
 let values = [1.0, 2.0, 3.0, 2.5, 1.5];
-let softmaxValues = softmax(values);
+let softmaxValues = calculateAlgorithm(values);
 
 // Event listeners
 updateButton.click(updateValues);
 fileUpload.change(handleFileUpload);
+algorithmSelect.change(() => {
+    softmaxValues = calculateAlgorithm(values);
+    initializeAnimation();
+    draw();
+});
 
 let currentValues = [...values];
 let animationProgress = 0;
