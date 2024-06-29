@@ -4,6 +4,10 @@
 <head>
     <title>Softmax and Softargmax Visualization</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -16,7 +20,7 @@
     <div id="controlsContainer">
         <div id="inputArray">
             <label for="arrayInput">Enter array (comma-separated):</label>
-            <input type="text" id="arrayInput" value="1.0, 2.0, 3.0, 2.5, 1.5">
+            <input type="text" id="arrayInput" value="1.0, 2.0, 3.0, 2.5, 1.5, 2.7, 3.1, 1.8, 2.2, 2.9, 3.3, 1.2, 2.4">
             <button id="update" class="btn">Update</button>
         </div>
         <div id="fileInput">
@@ -34,6 +38,9 @@
             <button id="start" class="btn">Start</button>
             <button id="stop" class="btn">Stop</button>
             <button id="reset" class="btn">Reset</button>
+        </div>
+        <div id="formula">
+            <p id="softmaxFormula">Softmax: <br> \( S(x_i) = \frac{e^{x_i}}{\sum_{j} e^{x_j}} \) </p>
         </div>
     </div>
 </div>

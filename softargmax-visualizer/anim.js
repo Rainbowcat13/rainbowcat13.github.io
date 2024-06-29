@@ -24,6 +24,7 @@ let updateButton = $("#update");
 let arrayInput = $("#arrayInput");
 let fileUpload = $("#fileUpload");
 let algorithmSelect = $("#algorithm");
+let formulaElement = $("#softmaxFormula");
 
 // Code to disable Start button initially
 stopButton.hide();
@@ -74,6 +75,7 @@ function updateValues() {
         draw(); // Only draw the updated data without starting the animation
         stopButton.hide();
         startButton.show();
+        updateFormulaDisplay();
     } else {
         alert("Please enter a valid array of numbers.");
     }
@@ -87,6 +89,17 @@ function calculateAlgorithm(arr) {
     } else {
         return softmax(arr);
     }
+}
+
+// Update the formula display
+function updateFormulaDisplay() {
+    let algorithm = algorithmSelect.val();
+    if (algorithm === 'softargmax') {
+        formulaElement.html(`Softargmax: <br> \\( S(x_i) = \\frac{e^{x_i} \\cdot x_i}{\\sum_{j} e^{x_j}} \\)`);
+    } else {
+        formulaElement.html(`Softmax: <br> \\( S(x_i) = \\frac{e^{x_i}}{\\sum_{j} e^{x_j}} \\)`);
+    }
+    MathJax.typeset(); // Ensure MathJax updates the formula
 }
 
 // Handle file upload
@@ -105,6 +118,7 @@ function handleFileUpload(event) {
                 draw(); // Only draw the updated data without starting the animation
                 stopButton.hide();
                 startButton.show();
+                updateFormulaDisplay();
             } else {
                 alert("The file contains an invalid array of numbers.");
             }
@@ -114,7 +128,7 @@ function handleFileUpload(event) {
 }
 
 // Initial array values
-let values = [1.0, 2.0, 3.0, 2.5, 1.5];
+let values = [1.0, 2.0, 3.0, 2.5, 1.5, 2.7, 3.1, 1.8, 2.2, 2.9, 3.3, 1.2, 2.4];
 let softmaxValues = calculateAlgorithm(values);
 
 // Event listeners
@@ -125,6 +139,7 @@ algorithmSelect.change(() => {
     draw(); // Only draw the updated data without starting the animation
     stopButton.hide();
     startButton.show();
+    updateFormulaDisplay();
 });
 
 let currentValues = [...values];
@@ -213,3 +228,4 @@ function draw(reset = false) {
 
 initializeAnimation();
 draw();
+updateFormulaDisplay();
