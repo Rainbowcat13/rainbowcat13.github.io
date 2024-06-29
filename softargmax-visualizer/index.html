@@ -34,6 +34,15 @@
                 <option value="softargmax">Softargmax</option>
             </select>
         </div>
+        <div id="temperatureControl">
+            <label for="temperatureInput">Temperature (t):</label>
+            <input type="range" id="temperatureSlider" min="0.1" max="10" step="0.1" value="1">
+            <input type="number" id="temperatureInput" min="0.1" max="10" step="0.1" value="1">
+        </div>
+        <div id="subtractMaxControl">
+            <label for="subtractMax">Subtract Max:</label>
+            <input type="checkbox" id="subtractMax">
+        </div>
         <div id="controls">
             <button id="start" class="btn">Start</button>
             <button id="stop" class="btn">Stop</button>
@@ -41,6 +50,11 @@
         </div>
         <div id="formula">
             <p id="softmaxFormula">Softmax: <br> \( S(x_i) = \frac{e^{x_i}}{\sum_{j} e^{x_j}} \) </p>
+        </div>
+        <div id="intermediaryInfo">
+            <p id="exponentInfo">Exponent: </p>
+            <p id="sumInfo">Sum: </p>
+            <p id="probabilityInfo">Probability: </p>
         </div>
     </div>
 </div>

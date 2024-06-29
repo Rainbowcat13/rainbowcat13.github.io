@@ -47,13 +47,19 @@ html, body {
 
 #controlsContainer input[type="text"],
 #controlsContainer input[type="file"],
-#controlsContainer select {
+#controlsContainer select,
+#controlsContainer input[type="range"],
+#controlsContainer input[type="number"] {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
+}
+
+#controlsContainer input[type="checkbox"] {
+    margin-top: 5px;
 }
 
 /* Button styles */

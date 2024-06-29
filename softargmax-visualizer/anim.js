@@ -25,6 +25,12 @@ let arrayInput = $("#arrayInput");
 let fileUpload = $("#fileUpload");
 let algorithmSelect = $("#algorithm");
 let formulaElement = $("#softmaxFormula");
+let temperatureSlider = $("#temperatureSlider");
+let temperatureInput = $("#temperatureInput");
+let subtractMaxCheckbox = $("#subtractMax");
+let exponentInfo = $("#exponentInfo");
+let sumInfo = $("#sumInfo");
+let probabilityInfo = $("#probabilityInfo");
 
 // Code to disable Start button initially
 stopButton.hide();
@@ -49,18 +55,39 @@ resetButton.click(function () {
     draw(true); // Pass true to reset to the original state
 });
 
-// Softmax function
+// Sync temperature slider and input
+temperatureSlider.on("input", function () {
+    temperatureInput.val(temperatureSlider.val());
+    updateValues();
+});
+temperatureInput.on("input", function () {
+    temperatureSlider.val(temperatureInput.val());
+    updateValues();
+});
+
+// Hide temperature controls for softmax
+algorithmSelect.change(function() {
+    if (algorithmSelect.val() === 'softargmax') {
+        $("#temperatureControl").show();
+    } else {
+        $("#temperatureControl").hide();
+    }
+    updateValues();
+});
+$("#temperatureControl").hide(); // Hide initially for softmax
+
+// Original Softmax function
 function softmax(arr) {
-    const maxVal = Math.max(...arr);
+    const maxVal = subtractMaxCheckbox.is(":checked") ? Math.max(...arr) : 0;
     const expArr = arr.map(x => Math.exp(x - maxVal));
     const sumExpArr = expArr.reduce((a, b) => a + b, 0);
     return expArr.map(exp => exp / sumExpArr);
 }
 
-// Softargmax function
-function softargmax(arr) {
-    const maxVal = Math.max(...arr);
-    const expArr = arr.map(x => Math.exp(x - maxVal));
+// Softargmax function with temperature
+function softargmax(arr, t) {
+    const maxVal = subtractMaxCheckbox.is(":checked") ? Math.max(...arr) : 0;
+    const expArr = arr.map(x => Math.exp((x - maxVal) / t));
     const sumExpArr = expArr.reduce((a, b) => a + b, 0);
     return expArr.map(exp => exp / sumExpArr).map((val, idx) => val * arr[idx]);
 }
@@ -76,6 +103,7 @@ function updateValues() {
         stopButton.hide();
         startButton.show();
         updateFormulaDisplay();
+        updateIntermediaryInfo();
     } else {
         alert("Please enter a valid array of numbers.");
     }
@@ -84,8 +112,9 @@ function updateValues() {
 // Calculate based on selected algorithm
 function calculateAlgorithm(arr) {
     let algorithm = algorithmSelect.val();
+    let temperature = parseFloat(temperatureInput.val());
     if (algorithm === 'softargmax') {
-        return softargmax(arr);
+        return softargmax(arr, temperature);
     } else {
         return softmax(arr);
     }
@@ -95,11 +124,30 @@ function calculateAlgorithm(arr) {
 function updateFormulaDisplay() {
     let algorithm = algorithmSelect.val();
     if (algorithm === 'softargmax') {
-        formulaElement.html(`Softargmax: <br> \\( S(x_i) = \\frac{e^{x_i} \\cdot x_i}{\\sum_{j} e^{x_j}} \\)`);
+        formulaElement.html(`Softargmax: <br> \\( S(x_i) = \\frac{e^{x_i/t}}{\\sum_{j} e^{x_j/t}} \\)`);
     } else {
         formulaElement.html(`Softmax: <br> \\( S(x_i) = \\frac{e^{x_i}}{\\sum_{j} e^{x_j}} \\)`);
     }
     MathJax.typeset(); // Ensure MathJax updates the formula
+}
+
+// Update intermediary information
+function updateIntermediaryInfo() {
+    let algorithm = algorithmSelect.val();
+    let temperature = parseFloat(temperatureInput.val());
+    const maxVal = subtractMaxCheckbox.is(":checked") ? Math.max(...values) : 0;
+    let expArr;
+    if (algorithm === 'softargmax') {
+        expArr = values.map(x => Math.exp((x - maxVal) / temperature));
+    } else {
+        expArr = values.map(x => Math.exp(x - maxVal));
+    }
+    let sumExp = expArr.reduce((a, b) => a + b, 0);
+    let probArr = expArr.map(exp => exp / sumExp);
+
+    exponentInfo.html(`Exponent: ${expArr.map(e => e.toFixed(2)).join(', ')}`);
+    sumInfo.html(`Sum: ${sumExp.toFixed(2)}`);
+    probabilityInfo.html(`Probability: ${probArr.map(p => p.toFixed(2)).join(', ')}`);
 }
 
 // Handle file upload
@@ -119,6 +167,7 @@ function handleFileUpload(event) {
                 stopButton.hide();
                 startButton.show();
                 updateFormulaDisplay();
+                updateIntermediaryInfo();
             } else {
                 alert("The file contains an invalid array of numbers.");
             }
@@ -140,6 +189,10 @@ algorithmSelect.change(() => {
     stopButton.hide();
     startButton.show();
     updateFormulaDisplay();
+    updateIntermediaryInfo();
+});
+subtractMaxCheckbox.change(() => {
+    updateValues();
 });
 
 let currentValues = [...values];
@@ -229,3 +282,4 @@ function draw(reset = false) {
 initializeAnimation();
 draw();
 updateFormulaDisplay();
+updateIntermediaryInfo();
