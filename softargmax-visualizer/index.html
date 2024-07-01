@@ -18,9 +18,15 @@
     </div>
 
     <div id="controlsContainer">
+        <div id="numElementsControl">
+            <label for="numElementsInput">Number of elements:</label>
+            <input type="number" id="numElementsInput" min="1" max="20" step="1" value="6">
+        </div>
         <div id="inputArray">
-            <label for="arrayInput">Enter array (comma-separated):</label>
-            <input type="text" id="arrayInput" value="1.0, 2.0, 3.0, 2.5, 1.5, 2.7, 3.1, 1.8, 2.2, 2.9, 3.3, 1.2, 2.4">
+            <label>Enter array values:</label>
+            <div class="array-inputs" id="arrayInputsContainer">
+                <!-- Dynamic input elements will be generated here -->
+            </div>
             <button id="update" class="btn">Update</button>
         </div>
         <div id="fileInput">

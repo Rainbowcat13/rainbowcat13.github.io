@@ -21,7 +21,8 @@ let startButton = $("#start");
 let stopButton = $("#stop");
 let resetButton = $("#reset");
 let updateButton = $("#update");
-let arrayInput = $("#arrayInput");
+let numElementsInput = $("#numElementsInput");
+let arrayInputsContainer = $("#arrayInputsContainer");
 let fileUpload = $("#fileUpload");
 let algorithmSelect = $("#algorithm");
 let formulaElement = $("#softmaxFormula");
@@ -31,6 +32,43 @@ let subtractMaxCheckbox = $("#subtractMax");
 let exponentInfo = $("#exponentInfo");
 let sumInfo = $("#sumInfo");
 let probabilityInfo = $("#probabilityInfo");
+
+let values = [1.0, 2.0, 3.0, 2.5, 1.5, 2.7];
+let softmaxValues = calculateAlgorithm(values);
+
+// Function to create array input elements
+function createArrayInputs(numElements) {
+    arrayInputsContainer.empty();
+    for (let i = 0; i < numElements; i++) {
+        let value = values[i] || 0;
+        let arrayInput = $(`
+            <div class="array-input">
+                <input type="number" class="value-input" min="0" max="10" step="0.1" value="${value}" data-index="${i}">
+                <input type="range" class="value-slider" min="0" max="10" step="0.1" value="${value}" data-index="${i}">
+            </div>
+        `);
+        arrayInputsContainer.append(arrayInput);
+    }
+    bindArrayInputEvents();
+}
+
+// Bind events for array input elements
+function bindArrayInputEvents() {
+    let valueSliders = $(".value-slider");
+    let valueInputs = $(".value-input");
+
+    // Sync value sliders and inputs
+    valueSliders.on("input", function () {
+        let index = $(this).data("index");
+        valueInputs.eq(index).val($(this).val());
+        updateValues();
+    });
+    valueInputs.on("input", function () {
+        let index = $(this).data("index");
+        valueSliders.eq(index).val($(this).val());
+        updateValues();
+    });
+}
 
 // Code to disable Start button initially
 stopButton.hide();
@@ -94,7 +132,10 @@ function softargmax(arr, t) {
 
 // Update values based on user input
 function updateValues() {
-    let inputValues = arrayInput.val().split(',').map(Number);
+    let valueInputs = $(".value-input");
+    let inputValues = valueInputs.map(function () {
+        return parseFloat($(this).val());
+    }).get();
     if (inputValues.length > 0 && inputValues.every(val => !isNaN(val))) {
         values = inputValues;
         softmaxValues = calculateAlgorithm(values);
@@ -104,8 +145,8 @@ function updateValues() {
         startButton.show();
         updateFormulaDisplay();
         updateIntermediaryInfo();
-    } else {
-        alert("Please enter a valid array of numbers.");
+    } else if (inputValues.length === 0) {
+        context.clearRect(0, 0, canvas.width(), canvas.height());
     }
 }
 
@@ -126,7 +167,7 @@ function updateFormulaDisplay() {
     if (algorithm === 'softargmax') {
         formulaElement.html(`Softargmax: <br> \\( S(x_i) = \\frac{e^{x_i/t}}{\\sum_{j} e^{x_j/t}} \\)`);
     } else {
-        formulaElement.html(`Softmax: <br> \\( S(x_i) = \\frac{e^{x_i}}{\\sum_{j} e^{x_j}} \\)`);
+        formulaElement.html(`Softmax: <br> \\( S(x_i) = \\frac{e^{x_i}}{\sum_{j} e^{x_j}} \\)`);
     }
     MathJax.typeset(); // Ensure MathJax updates the formula
 }
@@ -158,10 +199,18 @@ function handleFileUpload(event) {
         reader.onload = function(e) {
             const content = e.target.result;
             const inputValues = content.split(',').map(Number);
-            if (inputValues.length > 0 && inputValues.every(val => !isNaN(val))) {
+            const numElements = inputValues.length;
+            numElementsInput.val(numElements);
+            createArrayInputs(numElements);
+            if (inputValues.every(val => !isNaN(val))) {
                 values = inputValues;
+                let valueInputs = $(".value-input");
+                valueInputs.each(function (index) {
+                    $(this).val(inputValues[index]);
+                    let valueSliders = $(".value-slider");
+                    valueSliders.eq(index).val(inputValues[index]);
+                });
                 softmaxValues = calculateAlgorithm(values);
-                arrayInput.val(content); // Update the text input with file content
                 initializeAnimation();
                 draw(); // Only draw the updated data without starting the animation
                 stopButton.hide();
@@ -176,9 +225,19 @@ function handleFileUpload(event) {
     }
 }
 
-// Initial array values
-let values = [1.0, 2.0, 3.0, 2.5, 1.5, 2.7, 3.1, 1.8, 2.2, 2.9, 3.3, 1.2, 2.4];
-let softmaxValues = calculateAlgorithm(values);
+// Handle number of elements change
+numElementsInput.on("input", function () {
+    let numElements = parseInt($(this).val());
+    if (!isNaN(numElements) && numElements > 0) {
+        createArrayInputs(numElements);
+        updateValues();
+    } else {
+        context.clearRect(0, 0, canvas.width(), canvas.height());
+    }
+});
+
+// Initial array values and inputs
+createArrayInputs(values.length);
 
 // Event listeners
 updateButton.click(updateValues);
