@@ -2,7 +2,7 @@
 <html lang="RU">
 
 <head>
-    <title>Softmax and Softargmax Visualization</title>
+    <title>Softargmax Visualization</title>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script type="text/javascript" src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script type="text/javascript" id="MathJax-script" async
@@ -27,18 +27,6 @@
             <div class="array-inputs" id="arrayInputsContainer">
                 <!-- Dynamic input elements will be generated here -->
             </div>
-            <button id="update" class="btn">Update</button>
-        </div>
-        <div id="fileInput">
-            <label for="fileUpload">Upload array from file:</label>
-            <input type="file" id="fileUpload" accept=".txt">
-        </div>
-        <div id="algorithmSelect">
-            <label for="algorithm">Choose Algorithm:</label>
-            <select id="algorithm">
-                <option value="softmax">Softmax</option>
-                <option value="softargmax">Softargmax</option>
-            </select>
         </div>
         <div id="temperatureControl">
             <label for="temperatureInput">Temperature (t):</label>
@@ -55,12 +43,7 @@
             <button id="reset" class="btn">Reset</button>
         </div>
         <div id="formula">
-            <p id="softmaxFormula">Softmax: <br> \( S(x_i) = \frac{e^{x_i}}{\sum_{j} e^{x_j}} \) </p>
-        </div>
-        <div id="intermediaryInfo">
-            <p id="exponentInfo">Exponent: </p>
-            <p id="sumInfo">Sum: </p>
-            <p id="probabilityInfo">Probability: </p>
+            <p id="softmaxFormula">Softargmax: <br> \( S(x_i) = \frac{e^{x_i/t}}{\sum_{j} e^{x_j/t}} \) </p>
         </div>
     </div>
 </div>
